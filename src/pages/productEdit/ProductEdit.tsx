@@ -60,8 +60,8 @@ const ProductEdit: React.FC = () => {
     }, [product, reset])
 
     if (!loggedIn) return <Navigate to={`/product/${product?.id}`} replace />
-    if (loading) return <div style={{ padding: 20 }}>Loading product...</div>
-    if (!product) return <div style={{ padding: 20 }}>Product not found</div>
+    if (loading) return <div className='p-5'>Loading product...</div>
+    if (!product) return <div className='p-5'>Product not found</div>
 
     const onSubmit = (data: EditForm) => {
         const updated: Product = { ...product, ...data, description: editor?.getHTML() ?? product.description }

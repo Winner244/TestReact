@@ -14,6 +14,13 @@ export const ProductSchema = z.object({
     tags: z.array(z.string()).optional(),
     brand: z.string().optional(),
     images: z.array(z.string()).optional(),
+    reviews: z.array(z.object({
+        id: z.number(),
+        reviewerName: z.string(),
+        rating: z.number().min(0).max(5),
+        comment: z.string().max(500),
+        date: z.string()
+    })).optional(),
     thumbnail: z.string().optional(),
 })
 

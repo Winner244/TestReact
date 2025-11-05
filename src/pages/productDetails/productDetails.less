@@ -4,14 +4,53 @@
     padding: 16px;
 
     &__images {
-        display: flex;
-        gap: 8px;
+        overflow: hidden;
         margin-top: 12px;
 
-        img {
-            height: 160px;
-            object-fit: cover;
-            border-radius: 6px
+        &-container {
+            display: flex;
+        }
+
+        &-slide {
+            flex: 0 0 100%;
+            min-width: 0;
+        }
+    }
+
+    &__reviews {
+        margin-top: 18px;
+
+        h4 {
+            margin: 0 0 8px 0
+        }
+
+        &-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+    }
+
+    &__no-reviews {
+        color: @muted
+    }
+
+    &__review {
+        padding: 10px;
+        background: @card;
+        border-radius: 6px;
+
+        &-header {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        &-date{
+            font-size: 12px;
         }
     }
 }
