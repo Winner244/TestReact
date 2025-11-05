@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../utils/hooks'
 import { fetchProducts } from '../features/products/productsSlice'
 import ProductCard from '../components/ProductCard'
 import FilterSidebar from '../components/FilterSidebar'
-import Header from '../components/Header'
 
 import DataTable from 'datatables.net-react';
 import DataTablesCore from 'datatables.net-dt';
@@ -51,24 +50,18 @@ const Home: React.FC = () => {
 
   return (
     <div className="page-home">
-      <div>
-        <Header />
-      </div>
-      <div className='page-home__body'>
-        <FilterSidebar />
-        <DataTable data={filtered} />
-        <main className="product-grid">
-          {status === 'loading' && <div className="empty">Loading products…</div>}
-          {status === 'idle' && filtered.length === 0 && <div className="empty">No products found</div>}
-          {status === 'idle' && filtered.length > 0 && (
-            <div className="grid">
-              {filtered.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          )}
-        </main>
-      </div>
+      <FilterSidebar />
+      <main className="product-grid">
+        {status === 'loading' && <div className="empty">Loading products…</div>}
+        {status === 'idle' && filtered.length === 0 && <div className="empty">No products found</div>}
+        {status === 'idle' && filtered.length > 0 && (
+          <div className="grid">
+            {filtered.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   )
 }
