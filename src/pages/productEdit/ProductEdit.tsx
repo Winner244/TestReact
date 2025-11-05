@@ -112,12 +112,14 @@ const ProductEdit: React.FC = () => {
                         <label className='product-edit-page__form-label'>
                             Description
                             <EditorContext.Provider value={{ editor }}>
-                                <MarkButton type="bold" />
-                                <MarkButton type="italic" />
-                                <MarkButton type="strike" />
-                                <MarkButton type="underline" />
-                                <ListButton type="bulletList"/>
-                                <ListButton type="orderedList"/>
+                                <div className='product-edit-page__form-editor-buttons'>
+                                    <MarkButton type="bold" />
+                                    <MarkButton type="italic" />
+                                    <MarkButton type="strike" />
+                                    <MarkButton type="underline" />
+                                    <ListButton type="bulletList"/>
+                                    <ListButton type="orderedList"/>
+                                </div>
                                 <EditorContent editor={editor} role="presentation" />
                             </EditorContext.Provider>
                         </label>
