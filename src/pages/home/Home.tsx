@@ -1,15 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../utils/hooks'
-import { fetchProducts } from '../features/products/productsSlice'
-import ProductCard from '../components/ProductCard'
-import FilterSidebar from '../components/FilterSidebar'
+import { useAppDispatch, useAppSelector } from '../../utils/hooks'
+import { fetchProducts } from '../../features/products/productsSlice'
+import ProductCard from '../../components/ProductCard'
+import FilterSidebar from '../../components/FilterSidebar'
 
-import DataTable from 'datatables.net-react';
-import DataTablesCore from 'datatables.net-dt';
-
-import '../styles/home.less'
+import './home.less'
 
 
 const Home: React.FC = () => {
@@ -23,7 +20,8 @@ const Home: React.FC = () => {
   }, [dispatch])
 
   const filtered = useMemo(() => {
-    if (!products) return []
+    if (!products) return [];
+    
     const q = searchParams.get('q')?.toLowerCase() ?? ''
     const categories = (searchParams.get('categories') ?? '').split(',').map((s) => s.trim()).filter(Boolean)
     const minPrice = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined
@@ -46,16 +44,14 @@ const Home: React.FC = () => {
     })
   }, [products, searchParams])
 
-  DataTable.use(DataTablesCore);
-
   return (
     <div className="page-home">
       <FilterSidebar />
-      <main className="product-grid">
+      <main className="page-home__products">
         {status === 'loading' && <div className="empty">Loading products…</div>}
-        {status === 'idle' && filtered.length === 0 && <div className="empty">No products found</div>}
+        {status === 'idle' && filtered.length === 0 && <div className="page-home__products--empty">No products found</div>}
         {status === 'idle' && filtered.length > 0 && (
-          <div className="grid">
+          <div className="page-home__products-grid">
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
