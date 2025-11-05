@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -26,10 +26,14 @@ const ProductEdit: React.FC = () => {
     const product = useAppSelector((s) => (id ? s.products.byId[Number(id)] : undefined))
     const loggedIn = useAppSelector((s) => s.auth.loggedIn)
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (id) dispatch(fetchProductById(Number(id)))
-    }, [dispatch, id])
+        if (!id) return
+        if (product) return
+        setLoading(true)
+        dispatch(fetchProductById(Number(id))).finally(() => setLoading(false))
+    }, [dispatch, id, product])
 
     const { register, handleSubmit, reset } = useForm<EditForm>({
         resolver: zodResolver(EditSchema),
@@ -56,6 +60,7 @@ const ProductEdit: React.FC = () => {
     }, [product, reset])
 
     if (!loggedIn) return <Navigate to={`/product/${product?.id}`} replace />
+    if (loading) return <div style={{ padding: 20 }}>Loading product...</div>
     if (!product) return <div style={{ padding: 20 }}>Product not found</div>
 
     const onSubmit = (data: EditForm) => {

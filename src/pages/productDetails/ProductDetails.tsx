@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks'
 import { fetchProductById } from '../../features/products/productsSlice'
@@ -10,11 +10,16 @@ const ProductDetails: React.FC = () => {
     const dispatch = useAppDispatch()
     const product = useAppSelector((s) => (id ? s.products.byId[Number(id)] : undefined))
     const loggedIn = useAppSelector((s) => s.auth.loggedIn)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (id) dispatch(fetchProductById(Number(id)))
-    }, [dispatch, id])
+        if (!id) return
+        if (product) return
+        setLoading(true)
+        dispatch(fetchProductById(Number(id))).finally(() => setLoading(false))
+    }, [dispatch, id, product])
 
+    if (loading) return <div style={{ padding: 20 }}>Loading product...</div>
     if (!product) return <div style={{ padding: 20 }}>Product not found</div>
 
     return (

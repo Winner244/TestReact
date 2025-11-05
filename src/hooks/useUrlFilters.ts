@@ -1,13 +1,54 @@
-import { useSearchParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import { ZodError, ZodType } from "zod";
+import { FieldError, FieldErrors, FieldValues } from "react-hook-form";
 
-export function useUrlFilters(): { filtersRaw: Record<string, string>; setParams: (obj: Record<string, string>) => void } {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const filtersRaw = useMemo(() => {
-    const obj: Record<string, string> = {}
-    for (const [k, v] of searchParams.entries()) obj[k] = v
-    return obj
-  }, [searchParams])
+// Utility to convert ZodError to Hook Form-compatible FieldErrors
+const zodToHookFormErrors = (zodError: ZodError): FieldErrors => {
+  const errors: FieldErrors = {};
 
-  return { filtersRaw, setParams: (obj) => setSearchParams(obj) }
-}
+  for (const issue of zodError.issues) {
+    const path = issue.path.join(".") || "root";
+    errors[path] = {
+      type: issue.code,
+      message: issue.message,
+    } as FieldError;
+  }
+
+  return errors;
+};
+
+// Custom resolver for useForm()
+export const customZodResolver = (schema: ZodType) => {
+  return async (
+    values: FieldValues
+  ): Promise<{
+    values: FieldValues;
+    errors: FieldErrors;
+  }> => {
+    try {
+      const result = await schema.safeParseAsync(values);
+
+      if (result.success) {
+        return {
+          values: result.data as FieldValues,
+          errors: {},
+        };
+      } else {
+        return {
+          values: {},
+          errors: zodToHookFormErrors(result.error),
+        };
+      }
+    } catch (error) {
+      console.error("Resolver error: ", error);
+      return {
+        values: {},
+        errors: {
+          root: {
+            type: "unknown",
+            message: "An unknown error occurred during validation",
+          } as FieldError,
+        },
+      };
+    }
+  };
+};
