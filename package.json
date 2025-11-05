@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.4",
+    "@floating-ui/react": "^0.27.16",
+    "@tiptap/extension-list": "^3.10.2",
     "@tiptap/pm": "^3.10.2",
     "@tiptap/react": "^3.10.2",
     "@tiptap/starter-kit": "^3.10.2",
@@ -20,6 +22,7 @@
     "react-bootstrap": "^2.10.10",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.66.0",
+    "react-hotkeys-hook": "^5.2.1",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.1",
     "zod": "^4.1.12"
@@ -33,6 +36,7 @@
     "esbuild": "^0.25.12",
     "globals": "^16.4.0",
     "less": "^4.4.2",
+    "sass-embedded": "^1.93.3",
     "typescript": "^5.6.2",
     "vite": "^5.1.0"
   }

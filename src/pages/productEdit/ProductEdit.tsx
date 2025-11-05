@@ -3,18 +3,21 @@ import { z } from 'zod'
 import { useParams, Navigate, Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, EditorContext } from '@tiptap/react'
+import { MarkButton } from '@/components/tiptap-ui/mark-button'
+import { ListButton } from '@/components/tiptap-ui/list-button/list-button'
 import StarterKit from '@tiptap/starter-kit'
 
 import { useAppDispatch, useAppSelector } from '../../utils/hooks'
 import { fetchProductById, Product, upsertProduct } from '../../features/products/productsSlice'
 
+import '../../styles/_variables.scss';
+import '../../styles/_keyframe-animations.scss';
 import './productEdit.less'
 
 const EditSchema = z.object({
     title: z.string().min(1),
     price: z.number().nonnegative(),
-    rating: z.number().min(0).max(5).optional(),
     discountPercentage: z.number().min(0).optional(),
 })
 
@@ -42,6 +45,7 @@ const ProductEdit: React.FC = () => {
 
     // TipTap editor for description RTE
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [StarterKit],
         content: product?.description ?? '',
         editorProps: {
@@ -53,7 +57,11 @@ const ProductEdit: React.FC = () => {
 
     useEffect(() => {
         if (product) {
-            reset({ title: product.title, price: product.price, rating: product.rating ?? undefined, discountPercentage: product.discountPercentage ?? undefined })
+            reset({ 
+                title: product.title, 
+                price: product.price, 
+                discountPercentage: product.discountPercentage ?? 0 
+            })
             editor?.commands.setContent(product.description ?? '')
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,6 +74,7 @@ const ProductEdit: React.FC = () => {
     const onSubmit = (data: EditForm) => {
         const updated: Product = { ...product, ...data, description: editor?.getHTML() ?? product.description }
         dispatch(upsertProduct(updated));
+        console.log('updated', updated);
         navigate(`/product/${updated.id}`);
     }
 
@@ -91,13 +100,6 @@ const ProductEdit: React.FC = () => {
                         </label>
                     </div>
 
-                    <div className="form-group">
-                        <label className='product-edit-page__form-label'>
-                            Rating
-                            <input className="form-control" type="number" step="0.1" {...register('rating', { valueAsNumber: true })} />
-                        </label>
-                    </div>
-
 
                     <div className="form-group">
                         <label className='product-edit-page__form-label'>
@@ -109,7 +111,15 @@ const ProductEdit: React.FC = () => {
                     <div className="form-group">
                         <label className='product-edit-page__form-label'>
                             Description
-                            <EditorContent editor={editor} />
+                            <EditorContext.Provider value={{ editor }}>
+                                <MarkButton type="bold" />
+                                <MarkButton type="italic" />
+                                <MarkButton type="strike" />
+                                <MarkButton type="underline" />
+                                <ListButton type="bulletList"/>
+                                <ListButton type="orderedList"/>
+                                <EditorContent editor={editor} role="presentation" />
+                            </EditorContext.Provider>
                         </label>
                     </div>
 

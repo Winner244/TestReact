@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "target": "ES2021",
     "useDefineForClassFields": true,
     "lib": ["DOM", "ES2021"],
