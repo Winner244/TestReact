@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type AuthState = { loggedIn: boolean }
 
-const initialState: AuthState = { loggedIn: !!localStorage.getItem('mock_logged_in') }
+const LOGGED_KEY = 'mock_logged_in'
+const initialState: AuthState = { loggedIn: !!localStorage.getItem(LOGGED_KEY) }
 
 const authSlice = createSlice({
     name: 'auth',
@@ -10,11 +11,11 @@ const authSlice = createSlice({
     reducers: {
         login(state) {
             state.loggedIn = true
-            localStorage.setItem('mock_logged_in', '1')
+            localStorage.setItem(LOGGED_KEY, '1')
         },
         logout(state) {
             state.loggedIn = false
-            localStorage.removeItem('mock_logged_in')
+            localStorage.removeItem(LOGGED_KEY)
         },
     },
 })
