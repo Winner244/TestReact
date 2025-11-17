@@ -9,6 +9,18 @@
         display: none;
     }
 
+    &__close {
+        display: none;
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: transparent;
+        border: 0;
+        font-size: 1.2rem;
+        padding: 6px;
+        cursor: pointer;
+    }
+
     &__form {
         display: flex;
         flex-direction: column;
@@ -53,6 +65,10 @@
         &__toggle {
             display: block;
             margin-bottom: 10px;
+        }
+
+        &__close {
+            display: block;
         }
     }
 }

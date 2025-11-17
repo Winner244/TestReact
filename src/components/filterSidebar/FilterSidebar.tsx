@@ -71,6 +71,7 @@ const FilterSidebar: React.FC = () => {
             </button>
 
             <aside className={`filter-sidebar ${open ? 'filter-sidebar--open' : ''}`} aria-hidden={!open && window.innerWidth < 700}>
+                <button className="filter-sidebar__close" onClick={() => setOpen(false)} aria-label="Close filters">✕</button>
                 <form className='filter-sidebar__form' onSubmit={handleSubmit(onSubmit)}>
 
                     <div className="form-group">
