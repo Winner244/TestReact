@@ -54,15 +54,13 @@ const productsSlice = createSlice({
     initialState,
     reducers: {
         updateProduct(state, action: PayloadAction<Product>) {
-            const p = action.payload
-            const existingIndex = state.items.findIndex((i) => i.id === p.id)
-            if (existingIndex >= 0) state.items[existingIndex] = p
-            else state.items.push(p)
-            state.byId[p.id] = p
-        },
-        replaceAll(state, action: PayloadAction<Product[]>) {
-            state.items = action.payload
-            state.byId = action.payload.reduce((acc, p) => ({ ...acc, [p.id]: p }), {})
+            const existingIndex = state.items.findIndex(i => i.id === action.payload.id)
+            if (existingIndex >= 0) 
+                state.items[existingIndex] = action.payload
+            else 
+                state.items.push(action.payload)
+
+            state.byId[action.payload.id] = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -80,10 +78,11 @@ const productsSlice = createSlice({
         })
         builder.addCase(fetchProductById.fulfilled, (state, action) => {
             state.byId[action.payload.id] = action.payload
-            if (!state.items.find((i) => i.id === action.payload.id)) state.items.push(action.payload)
+            if (!state.items.find((i) => i.id === action.payload.id)) 
+                state.items.push(action.payload)
         })
     },
 })
 
-export const { updateProduct, replaceAll } = productsSlice.actions
+export const { updateProduct } = productsSlice.actions
 export default productsSlice.reducer
