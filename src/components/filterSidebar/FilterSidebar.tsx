@@ -12,12 +12,8 @@ const FilterSidebar: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams()
     const { initial, empty } = parseSearchParams(searchParams);
     const { register, watch, handleSubmit, setValue, reset, getValues, formState: { errors } } 
-        = useForm({ resolver: customZodResolver(FiltersSchema) as any, defaultValues: empty })
+        = useForm({ resolver: customZodResolver(FiltersSchema) as any, defaultValues: empty, values: initial })
     const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        reset(initial)
-    }, [searchParams])
 
     const onSubmit = (vals: Record<string, any>) => {
         //set to url only inputs with value
@@ -40,6 +36,7 @@ const FilterSidebar: React.FC = () => {
     const discountedOnly = watch('discountedOnly')
     const minPrice = watch('minPrice')
     const maxPrice = watch('maxPrice')
+
 
     // clear maxPrice when minPrice is empty
     useEffect(() => {
