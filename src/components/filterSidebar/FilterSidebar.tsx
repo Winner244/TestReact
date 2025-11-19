@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { parseSearchParams } from '@/utils/url'
 import { useSearchParams } from 'react-router-dom'
@@ -33,33 +33,25 @@ const FilterSidebar: React.FC = () => {
         setOpen(false)
     }
 
-    const discountedOnly = watch('discountedOnly')
     const minPrice = watch('minPrice')
     const maxPrice = watch('maxPrice')
 
+    if (maxPrice && !minPrice) {
+        setValue('maxPrice', '')
 
-    // clear maxPrice when minPrice is empty
-    useEffect(() => {
-        if (maxPrice && !minPrice) {
-            setValue('maxPrice', '')
+        const vals = getValues()
+        onSubmit(vals)
+        reset(vals)
+    }
 
-            const vals = getValues()
-            onSubmit(vals)
-            reset(vals)
-        }
-    }, [minPrice, setValue, getValues])
-
-    // clear minDiscountPercent when discountedOnly is false
-    useEffect(() => {
-        if (discountedOnly === false) {
-            setValue('minDiscountPercent', '')
-            
-            const vals = getValues()
-            onSubmit(vals)
-            reset(vals)
-        }
-    }, [discountedOnly, setValue, getValues])
-
+    const discountedOnly = watch('discountedOnly')
+    if (discountedOnly === false) {
+        setValue('minDiscountPercent', '')
+        
+        const vals = getValues()
+        onSubmit(vals)
+        reset(vals)
+    }
 
     return (
         <div>
